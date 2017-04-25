@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>增删改查</title>
+<!-- 	<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>	 -->	
+<style type="text/css">
+*{margin: 0;padding: 0;}
+#wrapper{margin: 20px auto;width: 850px;}
+.check1{margin: 20px 0;}
+#table1{border-collapse: collapse;border-spacing: 0;}
+#table1 th,td{border: 1px solid #b5d6e6;text-align: center;padding: 2px;}
+#table1 th{background:#afd; }
+#table1 tr:nth-child(odd){background:#def; }
+#confirm{margin-top:10px; }
+
+#form{width: 350px; height: 230px;margin: 0 auto;z-index: 101;position: relative;background: white;}
+#text{background:#f8f;height: 30px; }
+#text a{float: right;margin-right:15px; }
+#accept1{width:350px;}
+#accept1 div{margin:5px 0;}
+#accept1 div span{float: left;text-align:right;display:block;width: 100px;}
+#accept2{margin-top:20px;text-align: center; }
+
+#cover {
+    background: #000;
+    filter: alpha(opacity=50); /* IE的透明度 */
+    opacity: 0.5;  /* 透明度 */
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 100; /* 此处的图层要大于页面 */
+    display:none;
+}
+</style>
+</head>
+<body>
+    <div id="wrapper">
+	<div class="check1">查询：<input type="text" id="check" value="" /></div>
+		<table id="table1">
+		        <tr>
+		            <th style="width: 160px;">用户名</th>
+		            <th style="width: 160px;">密码</th>
+		            <th style="width: 160px;">确认密码</th>
+		            <th style="width: 160px;">邮箱</th>
+		            <th style="width: 160px;">QQ</th>
+		            <th style="width: 160px;">操作</th>
+		        </tr>
+		        <tr>
+		            <td>第一行第一列</td>
+		            <td>第一行第二列</td>
+		            <td>第一行第三列</td>
+		            <td>第一行第四列</td>
+		            <td>第一行第五列</td>
+		            <td>
+			           <a class="edit1" href="#">修改</a>&nbsp;&nbsp;
+			           <a href="#" class="del">删除</a>
+		            </td>
+		        </tr>
+		        <tr>
+		            <td>第二行第一列</td>
+		            <td>第二行第二列</td>
+		            <td>第二行第三列</td>
+		            <td>第二行第四列</td>
+		            <td>第二行第五列</td>
+		            <td>
+			            <a class="edit1" href="#">修改</a>&nbsp;&nbsp;
+			            <a href="#" class="del">删除</a>
+		            </td>
+		        </tr>
+		        <tr>
+		            <td>第三行第一列</td>
+		            <td>第三行第二列</td>
+		            <td>第三行第三列</td>
+		            <td>第三行第四列</td>
+		            <td>第三行第五列</td>
+		            <td>
+		            	<a class="edit1" href="#">修改</a>&nbsp;&nbsp;
+		            	<a class="del" href="#">删除</a>
+		            </td>
+		        </tr>
+		        <tr>
+		            <td>第四行第一列</td>
+		            <td>第四行第二列</td>
+		            <td>第四行第三列</td>
+		            <td>第四行第四列</td>
+		            <td>第四行第五列</td>
+		            <td>
+			            <a class="edit1" href="#">修改</a>&nbsp;&nbsp;
+			            <a class="del" href="#">删除</a>
+		            </td>
+		        </tr>
+		</table>
+		
+		<div id="confirm"><input id="addRow" type="button" value="添加一行"></div>
+	</div>	
+		<div id="form" style="display:none;">
+			<div id="text">
+				<span id="editTxt" style="float:left;margin-top:5px;">修改信息</span>
+				<a id="close" href="#">X</a>
+			</div>
+			
+			<div id="accept1">
+				<div>
+				  <span>用户名：</span>
+				  <input id="biao0"  name="biao" type="text" value="" />
+					<span id="spName"></span>
+				</div>
+				
+				<div>
+				  <span>密码：</span>
+				  <input id="biao1" name="biao" type="text" value="" />
+					<span id="spPwd"></span>
+				</div>
+				
+				<div>
+				  <span>确认密码：</span>	
+				  <input id="biao2" name="biao" type="text" value="" />
+					<span id="spNextPwd"></span>
+				</div>
+				
+				<div>
+				  <span>邮箱：</span>
+				  <input id="biao3" name="biao" type="text" value="" />
+				</div>
+				
+				<div>
+				  <span>QQ：</span>
+				  <input id="biao4" name="biao" type="text" value="" />
+				</div>
+			</div>
+			
+			<div id="accept2">
+				<input id="edit" type="button" value="确认修改" />
+				<input id="reset" type="button" value="重置" />
+			</div>
+		</div>
+		<div id="cover"></div>
+ <!-- <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script> -->
+ <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+ $(function(){
+ 	$(document).on("click",".del",function() {
+		var rowIndex=$(this).parents("tr").remove();
+		// javaScript 单行删除
+		$("#table1 tr").eq(rowIndex).remove();
+	});//单行删除
+
+	$("#addRow").on("click",function(){
+		$("#cover").add("#form").show();
+		// 打开遮罩层
+		$("#editTxt").text("添加信息");
+		$("#edit").val("确认添加");
+		 $("#accept1 :input[type=text]").val('');
+		//修改HTML文本 info
+	});
+
+	$("#close").on("click",function(){
+		$("#cover").add("#form").hide();
+	});//关闭遮罩层
+
+   var obj_tr='';
+   //全局变量 string 为null
+	$("#table1").on("click",".edit1",function() {
+		$("#cover").add("#form").show();
+		$("#editTxt").text("修改信息");
+		$("#edit").val("确认修改");
+		obj_tr=$(this).parents("tr")
+	    var td_len=obj_tr.children().length;
+        for(var i=0;i<td_len-1;i++) {
+        	$("#accept1 :input[type=text]").eq(i).val(obj_tr.find("td").eq(i).html());
+        //    $("#biao"+i).val(obj_tr.find("td").eq(i).html());
+         }
+	});
+	    $("#edit").on("click",function() {
+	    	var text=$("#edit").val();
+	    	//alert(text);
+	    	//判断 val值
+	    	if(text=="确认修改") {
+	    		//定义 表单内 input 文本数量
+		        var len=$("#accept1 :input[type=text]").length;
+		    	for(var j=0;j<len;j++) {
+	        	 	//console.log($("#accept1 :input[type=text]").eq(j).val());
+	        		obj_tr.find("td").eq(j).text(
+	        			$("#accept1 :input[type=text]").eq(j).val()
+	        		);//变量obj_tr内的"this"为 .edit1
+	            }
+		    }else{
+		       var newTr =
+		     "<tr><td>" + $("#biao0").val() + "</td>"
+				+"<td>" + $("#biao1").val()+ "</td>"
+				+"<td>" + $("#biao2").val()+"</td>"
+				+"<td>" + $("#biao3").val()+"</td>"
+				+"<td>" + $("#biao4").val()+"</td>"
+				+"<td><a class='edit1' href='#'> 修改</a>&nbsp;&nbsp;<a class='del' href='#'> 删除</a></td></tr>" 
+				$("#table1").append(newTr);
+				// 添加Row  插入末尾
+		    }
+		    $("#close").click();
+		    //结束弹窗     
+		})
+	
+	
+	$("#reset").on("click",function(){
+       $("#accept1 :input[type=text]").val('');
+		// var rowLen = $("#table1 tr:eq(1) td").length
+		// //用循环让表单中的输入框清空
+		// for(var i = 0;i<rowLen-1;i++){
+		// 	$("#biao"+i).val("");
+		// }//清空输入框
+	});
+
+    $("#check").keyup(function() {
+      $("#table1 tr").hide()
+      .filter(":contains('"+$(this).val()+"')")
+      .show();
+    })
+	//查询
+
+})
+
+
+
+
+	/* 显示遮罩层 */
+// function showOverlay() {
+//     $("#overlay").height(pageHeight());
+//     $("#overlay").width(pageWidth());
+
+//     // fadeTo第一个参数为速度，第二个为透明度
+//     // 多重方式控制透明度，保证兼容性，但也带来修改麻烦的问题
+//     $("#overlay").fadeTo(200, 0.5);
+// }
+
+/* 隐藏覆盖层 */
+// function hideOverlay() {
+//     $("#overlay").fadeOut(200);
+// }
+
+// /* 当前页面高度 */
+// function pageHeight() {
+//     return document.body.scrollHeight;
+// }
+
+// /* 当前页面宽度 */
+// function pageWidth() {
+//     return document.body.scrollWidth;
+// }	
+
+// //浏览器视口的高度
+// function windowHeight() {
+//     var de = document.documentElement;
+
+//     return self.innerHeight || (de && de.clientHeight) || document.body.clientHeight;
+// }
+
+// //浏览器视口的宽度
+// function windowWidth() {
+//     var de = document.documentElement;
+
+//     return self.innerWidth || (de && de.clientWidth) || document.body.clientWidth
+// }
+
+// /* 浏览器垂直滚动位置 */
+// function scrollY() {
+//     var de = document.documentElement;
+
+//     return self.pageYOffset || (de && de.scrollTop) || document.body.scrollTop;
+// }
+
+// /* 浏览器水平滚动位置 */
+// function scrollX() {
+//     var de = document.documentElement;
+
+//     return self.pageXOffset || (de && de.scrollLeft) || document.body.scrollLeft;
+// }	
+</script>
+</body>
+</html>
